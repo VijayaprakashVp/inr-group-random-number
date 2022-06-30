@@ -1,0 +1,37 @@
+.App {
+  text-align: center;
+}
+.outerdiv {
+  /* border: 1px solid red; */
+  display: grid;
+  grid-template-columns: 50% 50%;
+  width: 95%;
+  height: 70vh;
+  margin: auto;
+  /* padding-top: 5%; */
+  margin-top:1%;
+  background-color: rgb(107, 107, 201);
+}
+.dialpad {
+  /* border: 1px solid red; */
+  background-color: #fff;
+  width: 60%;
+  height: 60vh;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3 , 30%);
+}
+.dialpad p {
+  text-align: center;
+  padding-top: 20%;
+}
+.dialpad p:hover {
+  border: 1px solid black;
+}
+.spinwheel p {
+  color:white;
+  font-size: 16px;
+}
+.spinwheel {
+  margin-right: 10%;
+}

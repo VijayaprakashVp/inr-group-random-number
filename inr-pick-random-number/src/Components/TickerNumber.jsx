@@ -4,11 +4,12 @@ import "../App.css";
 import { Spinner } from "@chakra-ui/react";
 
 const TickerNumber = () => {
-  //   const [enterNumber, setEnterNumber] = useState("");
+  const [enterNumber, setEnterNumber] = useState("");
   const [spin, setSpin] = useState(false);
   const [randomNumber, setRandomNumber] = useState("");
   const [selectedNumberArr, setSeletedNumberArr] = useState([]);
   const [lengthCheck, setLengthCheck] = useState(false);
+  // const [manualInput, setManualInput] = useState(false);
 
   const handleSpin = () => {
     setSpin(!spin);
@@ -21,20 +22,31 @@ const TickerNumber = () => {
       setSpin(!spin);
       console.log(temp.toString().length);
       console.log(temp);
-      if (temp.length === 6) setLengthCheck(true);
+      setLengthCheck(true);
     }, 3000);
   }
 
-  const handleAddNumber = () => {
+  const handleAddNumber = (request) => {
     let flag = 0;
-    console.log("30", selectedNumberArr);
-    console.log(lengthCheck);
-    if (lengthCheck === true && selectedNumberArr.length < 5) {
-      flag = 1;
-      let temp = [...selectedNumberArr];
-      temp.push(randomNumber);
-      setSeletedNumberArr(temp);
-      console.log("38", selectedNumberArr);
+    if (request === "random") {
+      if (lengthCheck === true && selectedNumberArr.length < 5) {
+        flag = 1;
+        let temp = [...selectedNumberArr];
+        temp.push(randomNumber);
+        setSeletedNumberArr(temp);
+      }
+    }
+
+    // }
+    else if (request === "entered") {
+      if (lengthCheck === true && selectedNumberArr.length < 5) {
+        flag = 1;
+        let temp = [...selectedNumberArr];
+        temp.push(enterNumber);
+        setSeletedNumberArr(temp);
+        setEnterNumber("");
+        return;
+      }
     }
     if (selectedNumberArr.length === 5) {
       return alert(
@@ -45,26 +57,50 @@ const TickerNumber = () => {
     }
   };
 
-  const handleReset = () => {
-    selectedNumberArr([]);
+  const handleKeyInput = (value) => {
+    // if (enterNumber.length > 0) {
+    //   setManualInput(true);
+    // }
+    if (value === "Backspace") {
+      let numToArr = enterNumber.split("");
+      numToArr.pop();
+      let arrToStr = numToArr.toString().split(",").join("");
+      setEnterNumber(arrToStr);
+      return;
+    }
+    if (value === "Delete") {
+      setEnterNumber("");
+      return;
+    }
+    if (enterNumber.length === 6) {
+      setLengthCheck(true);
+    }
+    if (enterNumber.length < 6) {
+      // input_count++;
+      let temp = enterNumber;
+      temp += value;
+      setEnterNumber(temp);
+    } else {
+      alert("Ticket length exceeded");
+    }
   };
 
   return (
     <div style={{ backgroundColor: "grey" }}>
       <div className="outerdiv">
         <div className="dialpad">
-          <p>1</p>
-          <p>2</p>
-          <p>3</p>
-          <p>4</p>
-          <p>5</p>
-          <p>6</p>
-          <p>7</p>
-          <p>8</p>
-          <p>9</p>
-          <p>Backspace</p>
-          <p>0</p>
-          <p>Delete</p>
+          <button onClick={() => handleKeyInput("1")}>1</button>
+          <button onClick={() => handleKeyInput("2")}>2</button>
+          <button onClick={() => handleKeyInput("3")}>3</button>
+          <button onClick={() => handleKeyInput("4")}>4</button>
+          <button onClick={() => handleKeyInput("5")}>5</button>
+          <button onClick={() => handleKeyInput("6")}>6</button>
+          <button onClick={() => handleKeyInput("7")}>7</button>
+          <button onClick={() => handleKeyInput("8")}>8</button>
+          <button onClick={() => handleKeyInput("9")}>9</button>
+          <button onClick={() => handleKeyInput("Backspace")}>Backspace</button>
+          <button onClick={() => handleKeyInput("0")}>0</button>
+          <button onClick={() => handleKeyInput("Delete")}>Delete</button>
         </div>
         <div className="spinwheel">
           <p>Click Here to generate a random tickets</p>
@@ -93,6 +129,30 @@ const TickerNumber = () => {
           )}
           <p>Tickets Number Range : 100000 - 999999 </p>
           <p>
+            Entered Ticket :{" "}
+            <input
+              type="text"
+              placeholder="Enter value"
+              value={enterNumber}
+              style={{
+                fontSize: "24px",
+                borderRadius: "20px",
+                paddingLeft: "20px",
+                width: "170px",
+              }}
+            />
+            <br />
+            {/* <button onClick={() => handleAddNumber("entered")}>
+              Add Number
+            </button> */}
+            <button
+              className="button-3"
+              onClick={() => handleAddNumber("entered")}
+            >
+              Add Number
+            </button>
+          </p>
+          <p>
             Random Ticket :{" "}
             <span>
               <input
@@ -108,7 +168,15 @@ const TickerNumber = () => {
               />
             </span>
             <br />
-            <button onClick={handleAddNumber}>Add Number</button>
+            {/* <button onClick={() => handleAddNumber("random")}>
+              Add Number
+            </button> */}
+            <button
+              className="button-3"
+              onClick={() => handleAddNumber("random")}
+            >
+              Add Number
+            </button>
           </p>
         </div>
       </div>
@@ -130,7 +198,6 @@ const TickerNumber = () => {
                   marginRight: "20px",
                   padding: "5px 20px",
                   marginTop: "10px",
-                  border: "1px solid red",
                   borderRadius: "15px",
                   backgroundColor: "yellow",
                 }}
@@ -141,9 +208,9 @@ const TickerNumber = () => {
           : "Please Enter the Ticket to display here"}
       </div>
       {/* <br /> */}
-      <button style={{ marginBottom: "4%" }} onClick={handleReset}>
-        Reset Spin Count
-      </button>
+      {/* <button style={{ marginBottom: "4%" }} onClick={handleReset}> */}
+      {/* Reset Spin Count
+      </button> */}
     </div>
   );
 };
